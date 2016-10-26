@@ -15,6 +15,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gd4-mO-NcZ">
+                            <rect key="frame" x="0.0" y="337" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Обнулить"/>
+                            <connections>
+                                <action selector="actionClearAll:" destination="cGL-uz-dSc" eventType="touchUpInside" id="EUt-w8-Xxq"/>
+                            </connections>
+                        </button>
                         <sections>
                             <tableViewSection id="ryE-4o-Ptl">
                                 <cells>
@@ -36,6 +44,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" keyboardType="namePhonePad"/>
                                                     <connections>
+                                                        <action selector="actionFirstNameChange:forEvent:" destination="cGL-uz-dSc" eventType="editingDidEnd" id="vOF-ra-yys"/>
                                                         <outlet property="delegate" destination="cGL-uz-dSc" id="CMH-kX-58r"/>
                                                     </connections>
                                                 </textField>
@@ -84,6 +93,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" keyboardType="namePhonePad"/>
                                                     <connections>
+                                                        <action selector="actionLastNameChange:forEvent:" destination="cGL-uz-dSc" eventType="editingDidEnd" id="Xs0-Al-IBc"/>
                                                         <outlet property="delegate" destination="cGL-uz-dSc" id="4sU-0z-cma"/>
                                                     </connections>
                                                 </textField>
@@ -127,6 +137,9 @@
                                                         <segment title="М"/>
                                                         <segment title="Ж"/>
                                                     </segments>
+                                                    <connections>
+                                                        <action selector="actionGenderChange:forEvent:" destination="cGL-uz-dSc" eventType="valueChanged" id="p90-fp-XBb"/>
+                                                    </connections>
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
@@ -234,14 +247,19 @@
                     <connections>
                         <outlet property="dateOfBirth" destination="4Yj-0Y-1yR" id="dgj-4N-A2D"/>
                         <outlet property="firstName" destination="qlv-GA-iIk" id="FO6-eE-E7F"/>
-                        <outlet property="genderControl" destination="fZR-pC-6nP" id="w9C-yu-2f9"/>
+                        <outlet property="genderControl" destination="fZR-pC-6nP" id="tnP-SI-VKu"/>
                         <outlet property="gradeTextField" destination="FfX-NM-XNC" id="hLz-f6-F6f"/>
                         <outlet property="lastName" destination="m1l-HY-BvD" id="jBZ-Np-a0h"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yLc-gz-p5P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="t7l-Sv-n8z">
+                    <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="Button"/>
+                </button>
             </objects>
-            <point key="canvasLocation" x="828" y="373"/>
+            <point key="canvasLocation" x="740" y="386"/>
         </scene>
         <!--Date Picker Popover Controller-->
         <scene sceneID="hjY-aF-EQB">

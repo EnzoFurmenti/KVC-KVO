@@ -23,5 +23,5 @@ typedef enum{
 
 +(instancetype)randomStudent;
 
-
+-(void)clearAll;
 @end

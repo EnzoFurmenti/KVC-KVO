@@ -11,11 +11,22 @@
 @interface ViewController : UITableViewController
 @property (weak, nonatomic) IBOutlet UITextField *firstName;
 @property (weak, nonatomic) IBOutlet UITextField *lastName;
+
 @property (weak, nonatomic) IBOutlet UISegmentedControl *genderControl;
+
 @property (weak, nonatomic) IBOutlet UITextField *dateOfBirth;
 
 @property (weak, nonatomic) IBOutlet UITextField *gradeTextField;
 
+
+
+- (IBAction)actionClearAll:(UIButton *)sender;
+
+- (IBAction)actionFirstNameChange:(UITextField *)sender forEvent:(UIEvent *)event;
+
+- (IBAction)actionLastNameChange:(UITextField *)sender forEvent:(UIEvent *)event;
+
+- (IBAction)actionGenderChange:(UISegmentedControl *)sender forEvent:(UIEvent *)event;
 
 @end
 

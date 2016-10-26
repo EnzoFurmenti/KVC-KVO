@@ -87,11 +87,13 @@ static int lastNameCount = 21;
 @implementation Student
 
 +(instancetype)randomStudent{
-    
     Student *randomStudent = [[Student alloc]init];
     randomStudent = [randomStudent createRandomStudent];
     return randomStudent;
 }
+
+
+
 
 #pragma mark - metods
 -(Student*)createRandomStudent{
@@ -115,6 +117,17 @@ static int lastNameCount = 21;
     randomStudent.grade = [self randomMark];
     return randomStudent;
 }
+
+
+
+-(void)addObserver:(Student*)student withProperty:(NSString*)propertyName {
+    [student addObserver:student
+                    forKeyPath:propertyName
+                       options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                       context:NULL];
+}
+
+
 
 -(NSString*)randomMark{
     NSInteger grade = (arc4random() % 1001) / 10;
@@ -148,6 +161,28 @@ static int lastNameCount = 21;
         gradeName = @"Unhonest";
     }
     return gradeName;
+}
+
+-(void)clearAll{
+    [self willChangeValueForKey:@"firstName"];
+    _firstName = nil;
+    [self didChangeValueForKey:@"firstName"];
+    
+    [self willChangeValueForKey:@"lastName"];
+    _lastName = nil;
+    [self didChangeValueForKey:@"lastName"];
+    
+    [self willChangeValueForKey:@"grade"];
+    _grade = nil;
+    [self didChangeValueForKey:@"grade"];
+    
+    [self willChangeValueForKey:@"dateOfBirth"];
+    _dateOfBirth = nil;
+    [self didChangeValueForKey:@"dateOfBirth"];
+}
+
+-(NSString*)description{
+    return [NSString stringWithFormat:@"Student: %@ %@",self.lastName, self.firstName];
 }
 
 #pragma mark - metods Date
@@ -187,6 +222,7 @@ static int lastNameCount = 21;
     NSDate *dateOfBirth = [NSDate dateWithTimeInterval:randomTimeInterval sinceDate:fromDate];
     return dateOfBirth;
 }
+
 
 
 @end

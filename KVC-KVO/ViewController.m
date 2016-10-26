@@ -12,10 +12,10 @@
 #import "Student.h"
 
 typedef enum{
-    ViewControllerTypeFirstName = 10,
-    ViewControllerTypeLastName  = 20,
-    ViewControllerTypeDayOfBirthField = 100,
-    ViewControllerTypeEducationField  = 200
+    ViewControllerTypeFirstName         = 10,
+    ViewControllerTypeLastName          = 20,
+    ViewControllerTypeDayOfBirthField   = 100,
+    ViewControllerTypeEducationField    = 200
 }ViewControllerTypeSender;
 
 @interface ViewController ()<UITextFieldDelegate,PopoverCDelegate>
@@ -31,6 +31,14 @@ typedef enum{
 -(void)loadView{
     [super loadView];
     self.student = [Student randomStudent];
+    [self addObserver:self forKeyPath:@"student"  options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+              context:NULL];
+    
+    [self  addObserver:@"firstName"];
+    [self  addObserver:@"lastName"];
+    [self  addObserver:@"dateOfBirth"];
+    [self  addObserver:@"gender"];
+    [self  addObserver:@"grade"];
 
 }
 
@@ -47,15 +55,61 @@ typedef enum{
     
 }
 
+-(void)dealloc{
+    [self removeObserver:self forKeyPath:@"student"];
+    [self removeObserver:self.student forKeyPath:@"firstName"];
+    [self removeObserver:self.student forKeyPath:@"lastName"];
+    [self removeObserver:self.student forKeyPath:@"dateOfBirth"];
+    [self removeObserver:self.student forKeyPath:@"gender"];
+    [self removeObserver:self.student forKeyPath:@"grade"];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 
+#pragma mark - KVO
+-(void)addObserver:(NSString*)propertyName {
+    [self.student addObserver:self
+              forKeyPath:propertyName
+                 options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                 context:NULL];
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath
+                     ofObject:(id)object
+                       change:(NSDictionary<NSString *,id> *)change
+                      context:(void *)context{
+    NSLog(@"changeProperty %@ object %@ change %@",keyPath,object,change);
+}
+
+
 #pragma mark - actionChangeValue
 
-//-()
+
+- (IBAction)actionFirstNameChange:(UITextField *)sender forEvent:(UIEvent *)event {
+    
+    self.student.firstName = sender.text;
+}
+
+- (IBAction)actionLastNameChange:(UITextField *)sender forEvent:(UIEvent *)event {
+    
+    self.student.lastName = sender.text;
+}
+
+- (IBAction)actionGenderChange:(UISegmentedControl *)sender forEvent:(UIEvent *)event {
+    
+    self.student.gender = sender.selectedSegmentIndex ? StudentMale : StudentFemale;
+}
+
+#pragma mark - action
+
+-(IBAction)actionClearAll:(UIButton *)sender{
+    [self.student clearAll];
+}
+
 
 #pragma mark - UITableViewDelegate
 
@@ -74,9 +128,11 @@ typedef enum{
         switch (textFieldObj.tag) {
             case ViewControllerTypeDayOfBirthField:
                 self.dateOfBirth.text = valueStr;
+                self.student.dateOfBirth = [self dateFromString:valueStr];
                 break;
             case ViewControllerTypeEducationField:
                 self.gradeTextField.text = valueStr;
+                self.student.grade = valueStr;
                 break;
         }
         
@@ -173,4 +229,5 @@ typedef enum{
     }
     return totalShouldChange;
 }
+
 @end
