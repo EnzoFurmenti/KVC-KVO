@@ -21,6 +21,11 @@ typedef enum{
 @property (nonatomic,assign) StudentGenderType gender;
 @property (nonatomic,assign) NSString *grade;
 
+
+@property(nonatomic,assign) NSInteger identifier;
+
+@property(nonatomic,strong) Student *currentFriend;
+
 +(instancetype)randomStudent;
 
 -(void)clearAll;

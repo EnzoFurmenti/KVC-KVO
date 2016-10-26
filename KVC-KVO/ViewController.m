@@ -21,6 +21,8 @@ typedef enum{
 @interface ViewController ()<UITextFieldDelegate,PopoverCDelegate>
 
 @property (nonatomic,strong) Student *student;
+@property (nonatomic,strong) Student *studentWithFriend;
+@property(nonatomic, strong) NSMutableArray<Student*>*mArrayOfStudents;
 @property (nonatomic,strong) DatePickerPopoverController *datePickerPC;
 @property (nonatomic,strong) GradePickerViewController *gradePickerPC;
 
@@ -31,14 +33,12 @@ typedef enum{
 -(void)loadView{
     [super loadView];
     self.student = [Student randomStudent];
-    [self addObserver:self forKeyPath:@"student"  options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-              context:NULL];
-    
     [self  addObserver:@"firstName"];
     [self  addObserver:@"lastName"];
     [self  addObserver:@"dateOfBirth"];
     [self  addObserver:@"gender"];
     [self  addObserver:@"grade"];
+    
 
 }
 
@@ -52,16 +52,25 @@ typedef enum{
     self.genderControl.selectedSegmentIndex = self.student.gender == StudentFemale ? StudentFemale : StudentMale;
     self.dateOfBirth.text = [self stringFromDate:self.student.dateOfBirth];
     self.gradeTextField.text = self.student.grade;
+    [self createArrayStudents:30];
+
     
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self createfriendForStudent];
+    [self changeNameStudent];
+}
+
 -(void)dealloc{
-    [self removeObserver:self forKeyPath:@"student"];
-    [self removeObserver:self.student forKeyPath:@"firstName"];
-    [self removeObserver:self.student forKeyPath:@"lastName"];
-    [self removeObserver:self.student forKeyPath:@"dateOfBirth"];
-    [self removeObserver:self.student forKeyPath:@"gender"];
-    [self removeObserver:self.student forKeyPath:@"grade"];
+    [self.student removeObserver:self forKeyPath:@"firstName"];
+    [self.student removeObserver:self forKeyPath:@"lastName"];
+    [self.student removeObserver:self forKeyPath:@"dateOfBirth"];
+    [self.student removeObserver:self forKeyPath:@"gender"];
+    [self.student removeObserver:self forKeyPath:@"grade"];
+    [self.studentWithFriend removeObserver:self forKeyPath:@"firstName"];
+    [self.studentWithFriend removeObserver:self forKeyPath:@"lastName"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,6 +92,13 @@ typedef enum{
                        change:(NSDictionary<NSString *,id> *)change
                       context:(void *)context{
     NSLog(@"changeProperty %@ object %@ change %@",keyPath,object,change);
+}
+-(NSMutableArray<Student*>*)mArrayOfStudents{
+    if(!_mArrayOfStudents)
+    {
+        _mArrayOfStudents = [[NSMutableArray alloc]init];
+    }
+    return _mArrayOfStudents;
 }
 
 
@@ -229,5 +245,50 @@ typedef enum{
     }
     return totalShouldChange;
 }
+
+
+#pragma mark - metods for master level
+
+-(void)createArrayStudents:(NSInteger)numberOfStudents{
+    for(NSInteger i = 0 ; i < numberOfStudents;i++)
+    {
+        Student *student = [Student randomStudent];
+        student.identifier = i;
+        [self.mArrayOfStudents addObject:student];
+        if(i == 20)
+        {
+            self.studentWithFriend = student;
+            [self.studentWithFriend addObserver:self forKeyPath:@"firstName" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
+            [self.studentWithFriend addObserver:self forKeyPath:@"lastName" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
+            
+        }
+    }
+}
+
+
+-(void)createfriendForStudent{
+    for(NSInteger i = 0 ; i < [self.mArrayOfStudents count];i++)
+    {
+        Student *student = [self.mArrayOfStudents objectAtIndex:i];
+        if([self.mArrayOfStudents count] - 1 == i)
+        {
+            [student setValue:[self.mArrayOfStudents objectAtIndex:0] forKey:@"currentFriend"];
+        }else{
+             [student setValue:[self.mArrayOfStudents objectAtIndex:i] forKey:@"currentFriend"];
+        }
+        student.identifier = i;
+    }
+}
+
+
+-(void)changeNameStudent{
+    for(NSInteger i = 0 ; i < [self.mArrayOfStudents count];i++)
+    {
+        Student *student = [self.mArrayOfStudents objectAtIndex:i];
+        student.firstName = [NSString stringWithFormat:@"%@ - %d",student.firstName,i];
+        student.lastName = [NSString stringWithFormat:@"%@ - %d",student.lastName,i];
+    }
+}
+
 
 @end
