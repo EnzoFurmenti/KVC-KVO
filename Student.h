@@ -13,6 +13,20 @@ typedef enum{
   StudentFemale = 1,
   StudentMale = 0
 }StudentGenderType;
+
+typedef enum{
+    StudentGradeOtland      = 100,
+    StudentGradeSupreme     = 93,
+    StudentGradeArtful      = 85,
+    StudentGradeBeautiful   = 77,
+    StudentGradeCreditable  = 70,
+    StudentGradeDiversly    = 63,
+    StudentGradeEnough      = 50,
+    StudentGradeFail        = 1,
+    StudentGradeUnhonest    = 0
+}StudentGradeType;
+
+
 @interface Student : NSObject
 
 @property (nonatomic,strong) NSString *firstName;

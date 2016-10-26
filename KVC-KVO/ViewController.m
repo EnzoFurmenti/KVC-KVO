@@ -52,7 +52,15 @@ typedef enum{
     self.genderControl.selectedSegmentIndex = self.student.gender == StudentFemale ? StudentFemale : StudentMale;
     self.dateOfBirth.text = [self stringFromDate:self.student.dateOfBirth];
     self.gradeTextField.text = self.student.grade;
-    [self createArrayStudents:30];
+    [self createArrayStudents:100000];
+    
+    NSLog(@"allnames: %@",[self allNames]);
+    NSLog(@"min Date From Students %@",[self stringFromDate:[self minDate]]);
+    NSLog(@"max Date From Students %@",[self stringFromDate:[self maxDate]]);
+    
+    NSLog(@"sum Grade %f",[self sumGrade]);
+    
+    NSLog(@"average Grade %ff",[self avrGrade]);
 
     
 }
@@ -288,6 +296,91 @@ typedef enum{
         student.firstName = [NSString stringWithFormat:@"%@ - %d",student.firstName,i];
         student.lastName = [NSString stringWithFormat:@"%@ - %d",student.lastName,i];
     }
+}
+-(NSArray*)allNames{
+    NSMutableArray *mArrayNames = [[NSMutableArray alloc]init];
+    for (Student *currentStudent in self.mArrayOfStudents)
+    {
+        [mArrayNames addObject:[currentStudent valueForKey:@"firstName"]];
+    }
+    return[[NSArray alloc]initWithArray:mArrayNames];
+}
+
+-(CGFloat)sumGrade{
+    CGFloat totalSumGrade = 0.f;
+    for (Student *currentStudent in self.mArrayOfStudents)
+    {
+        CGFloat currentGrade = [self gradeFromString:[currentStudent valueForKey:@"grade"]];
+        totalSumGrade += currentGrade;
+    }
+    return totalSumGrade;
+}
+
+-(CGFloat)avrGrade{
+    CGFloat avrGrade = 0.f;
+    if([self.mArrayOfStudents count] > 0)
+    {
+        avrGrade =  [self sumGrade] / (CGFloat)[self.mArrayOfStudents count];
+    }
+    return avrGrade;
+}
+
+
+-(NSDate*)maxDate{
+    NSDate *maxDate = [NSDate dateWithTimeIntervalSince1970:0];
+    for (Student *currentStudent in self.mArrayOfStudents)
+    {
+        NSDate* currentDate = [currentStudent valueForKey:@"dateOfBirth"];
+
+        maxDate = [maxDate laterDate:currentDate];
+    }
+    return maxDate;
+
+}
+
+-(NSDate*)minDate{
+    NSDate *minDate = [NSDate dateWithTimeIntervalSinceNow:0];
+    for (Student *currentStudent in self.mArrayOfStudents)
+    {
+        NSDate* currentDate = [currentStudent valueForKey:@"dateOfBirth"];
+        minDate = [minDate earlierDate:currentDate];
+    }
+    return minDate;
+    
+}
+
+
+-(CGFloat)gradeFromString:(NSString*)gradeName{
+    CGFloat totalGrade;
+    if([gradeName isEqualToString: @"Outland"])
+    {
+        totalGrade = 100.f;
+    }else if([gradeName isEqualToString: @"Supreme"]){
+        totalGrade = 93.f;
+        
+    }else if([gradeName isEqualToString: @"Artful"]){
+        totalGrade = 85.f;
+        
+    }else if([gradeName isEqualToString: @"Beautiful"]){
+        totalGrade = 77.f;
+        
+    }else if([gradeName isEqualToString: @"Creditable"]){
+        totalGrade = 70.f;
+        
+    }else if([gradeName isEqualToString: @"Diversly"]){
+        totalGrade = 63.f;
+        
+    }else if([gradeName isEqualToString: @"Enough"]){
+         totalGrade = 50.f;
+        
+    }else if([gradeName isEqualToString: @"Fail"]){
+        totalGrade = 1.f;
+    }
+    else
+    {
+        totalGrade = 0.f;
+    }
+    return totalGrade;
 }
 
 

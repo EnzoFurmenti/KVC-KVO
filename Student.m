@@ -8,17 +8,7 @@
 
 #import "Student.h"
 
-typedef enum{
-    StudentGradeOtland      = 100,
-    StudentGradeSupreme     = 93,
-    StudentGradeArtful      = 85,
-    StudentGradeBeautiful   = 77,
-    StudentGradeCreditable  = 70,
-    StudentGradeDiversly    = 63,
-    StudentGradeEnough      = 50,
-    StudentGradeFail        = 1,
-    StudentGradeUnhonest    = 0
-}StudentGradeType;
+
 
 static NSString *firstFemaleNames[] = {
                                 @"Милена",
